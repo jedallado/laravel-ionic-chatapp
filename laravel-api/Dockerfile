@@ -35,7 +35,7 @@ WORKDIR /var/www
 COPY . .
 
 # Install project dependencies
-RUN composer install --no-dev --optimize-autoloader
+RUN composer update --no-dev --optimize-autoloader
 
 # Expose port for Laravel API
 EXPOSE 9000
