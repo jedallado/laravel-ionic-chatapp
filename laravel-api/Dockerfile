@@ -36,9 +36,7 @@ COPY . .
 
 # Install project dependencies
 RUN composer update --no-dev --optimize-autoloader
-
 # Expose port for Laravel API
 EXPOSE 9000
-
 # Start the Laravel server
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=9000"]
