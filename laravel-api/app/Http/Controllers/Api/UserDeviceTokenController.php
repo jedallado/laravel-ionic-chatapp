@@ -29,7 +29,7 @@ class UserDeviceTokenController extends Controller
         $token = $data['token'] ?? '';
 
         $tokenExist = UserDeviceToken::ofUserId($userId)
-                        ->where($token, )->count() > 0;
+                        ->where(UserDeviceTokenEnum::token(), $token)->count() > 0;
 
         if (!$tokenExist) {
             $userDeviceToken = UserDeviceToken::create($data);
