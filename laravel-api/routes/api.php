@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\ChatroomController;
 use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\RegisterController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\UserDeviceTokenController;
 use App\Http\Controllers\Api\UserProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,4 +25,5 @@ Route::middleware('auth:sanctum')->group(function () {
     // Route::apiResource('users', UserController::class); not needed for now
     Route::apiResource('chatrooms', ChatroomController::class);
     Route::apiResource('messages', MessageController::class);
+    Route::apiResource('user-device-tokens', UserDeviceTokenController::class)->only(['store']);
 });

@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Api;
 
 use App\Enumerations\Models\ChatRoomModelEnum;
 use App\Enumerations\Models\MessageModelEnum;
+use App\Enumerations\Models\UserDeviceTokenEnum;
+use App\Enumerations\Models\UserModelEnum;
 use App\Events\MessageReceived;
 use App\Events\MessageSent;
 use App\Http\Controllers\Controller;
 use App\Models\Chatroom;
 use App\Models\Message;
 use App\Models\User;
+use App\Models\UserDeviceToken;
 use App\Services\PushNotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -67,13 +70,22 @@ class MessageController extends Controller
         if ($recipient) {
             $recipientName = $recipient->profile->full_name;
 
-            Log::info("Sending push notification to recipient: {$recipientName}");
-            // TODO: Create a table to store the device tokens per user login
-            $this->pushNotificationService->sendPushNotificationUsingServiceAccount(
-                'fAI_xzr8QYiRwP9GtAO_4h:APA91bHDHcEslO-7JomZuyKkUxvybCm1sf4r3FmkZ_b8sdC9In9AyW9Yk55C0xRJ-rvb1RdZxjzO4_Cferb8kDwRXCYW0p-xBn-xFomGjaMnTuWOb3uri84',
-                $recipientName,
-                $message->getMessage()
-            );
+            $deviceTokens = UserDeviceToken::ofUserId($recipient->{UserModelEnum::getId()})->get();
+
+            foreach ($deviceTokens as $deviceToken) {
+                Log::info("Sending push notification to recipient: {$recipientName}");
+                // TODO: Create a table to store the device tokens per user login
+                $token = $deviceToken->{UserDeviceTokenEnum::token()};
+
+                Log::info($token);
+                if ($token) {
+                    $this->pushNotificationService->sendPushNotificationUsingServiceAccount(
+                        $token,
+                        $recipientName,
+                        $message->getMessage()
+                    );
+                }
+            }
         }
 
         return response()->json($message, 201);
