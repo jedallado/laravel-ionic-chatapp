@@ -36,7 +36,7 @@ class MessageReceived implements ShouldBroadcastNow
      */
     public function broadcastOn(): array
     {
-        Log::info('Connecting to channel: ' . 'chat.' . $this->userId);
+        Log::info('Connecting to received channel: ' . 'chat.' . $this->userId);
         return [
             new Channel('chat.' . $this->userId),
         ];

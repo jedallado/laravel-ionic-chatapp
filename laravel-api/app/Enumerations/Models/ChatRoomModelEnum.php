@@ -21,9 +21,9 @@ enum ChatRoomModelEnum: string
 
     public static function fillable(): array {
         return [
-            self::getRoomName(),
-            self::getMembers(),
-            self::getLastMessage(),
+            self::roomName(),
+            self::members(),
+            self::lastMessage(),
         ];
     }
 
@@ -31,27 +31,27 @@ enum ChatRoomModelEnum: string
         return self::TABLE_NAME;
     }
 
-    public static function getRoomName(): string {
+    public static function roomName(): string {
         return self::RoomName->value;
     }
 
-    public static function getMembers(): string {
+    public static function members(): string {
         return self::Members->value;
     }
 
-    public static function getLastMessage(): string {
+    public static function lastMessage(): string {
         return self::LastMessage->value;
     }
 
-    public static function getDefaultChatRoomName(): string {
+    public static function defaultChatRoomName(): string {
         return self::DefaultChatRoomName->value;
     }
 
-    public static function getCreatedAt(): string {
+    public static function createdAt(): string {
         return self::CREATED_AT->value;
     }
 
-    public static function getUpdatedAt(): string {
+    public static function updatedAt(): string {
         return self::UPDATED_AT->value;
     }
 }

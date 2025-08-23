@@ -4,6 +4,7 @@ namespace App\Models;
 
 
 use App\Traits\Searchable;
+use Carbon\Carbon;
 use MongoDB\Laravel\Eloquent\Model;
 
 class BaseModel extends Model

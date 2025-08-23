@@ -42,4 +42,8 @@ return [
         'scheme' => 'https',
     ],
 
+    'fcm' => [
+        'api_key' => env('FCM_API_KEY')
+    ]
+
 ];

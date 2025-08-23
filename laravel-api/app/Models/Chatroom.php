@@ -25,11 +25,11 @@ class Chatroom extends BaseModel
 
     // CUSTOM FUNCTIONS
     public function setLastMessage(Message $message) {
-        $this->{ChatRoomModelEnum::getLastMessage()} = $message->toArray();
+        $this->{ChatRoomModelEnum::lastMessage()} = $message->toArray();
     }
 
     public function setDefaultRoomName() {
-        $this->{ChatRoomModelEnum::getRoomName()} = ChatRoomModelEnum::getDefaultChatRoomName();
+        $this->{ChatRoomModelEnum::roomName()} = ChatRoomModelEnum::defaultChatRoomName();
     }
     // END OF CUSTOM FUNCTIONS
 
@@ -37,11 +37,11 @@ class Chatroom extends BaseModel
     protected function roomName(): Attribute
     {
         $user = Auth::user();
-        $name = $this->{ChatRoomModelEnum::getRoomName()} ?? ChatRoomModelEnum::getDefaultChatRoomName();
-        $members = $this->{ChatRoomModelEnum::getMembers()};
+        $name = $this->{ChatRoomModelEnum::roomName()} ?? ChatRoomModelEnum::defaultChatRoomName();
+        $members = $this->{ChatRoomModelEnum::members()};
 
-        if ($members && $name === ChatRoomModelEnum::getDefaultChatRoomName()) {
-            $members = Arr::where($this->{ChatRoomModelEnum::getMembers()}, function ($value) use ($user) {
+        if ($members && $name === ChatRoomModelEnum::defaultChatRoomName()) {
+            $members = Arr::where($this->{ChatRoomModelEnum::members()}, function ($value) use ($user) {
                 return $value !== $user->id;
             });
 
@@ -64,7 +64,7 @@ class Chatroom extends BaseModel
     }
 
     public function getMembers() {
-        return $this->{ChatRoomModelEnum::getMembers()};
+        return $this->{ChatRoomModelEnum::members()};
     }
     // END OF ACCESSORS AND MUTATORS
 

@@ -33,7 +33,7 @@ class MessageSent implements ShouldBroadcastNow
      */
     public function broadcastOn(): array
     {
-        Log::info('Connecting to channel: ' . 'chat.' . $this->message->getChatroomId());
+        Log::info('Connecting to sent channel: ' . 'chat.' . $this->message->getChatroomId());
         return [
             new Channel('chat.' . $this->message->getChatroomId()),
         ];
