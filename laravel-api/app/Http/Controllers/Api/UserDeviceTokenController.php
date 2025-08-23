@@ -6,6 +6,7 @@ use App\Enumerations\Models\UserDeviceTokenEnum;
 use App\Http\Controllers\Controller;
 use App\Models\UserDeviceToken;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserDeviceTokenController extends Controller
 {
@@ -24,8 +25,11 @@ class UserDeviceTokenController extends Controller
     {
         $data = $request->only(UserDeviceTokenEnum::fillable());
 
-        $tokenExist = UserDeviceToken::ofUserId($data['userId'])
-                        ->where(UserDeviceTokenEnum::token(), $data['token'])->count() > 0;
+        $userId = Auth::id();
+        $token = $data['token'] ?? '';
+
+        $tokenExist = UserDeviceToken::ofUserId($userId)
+                        ->where($token, )->count() > 0;
 
         if (!$tokenExist) {
             $userDeviceToken = UserDeviceToken::create($data);
