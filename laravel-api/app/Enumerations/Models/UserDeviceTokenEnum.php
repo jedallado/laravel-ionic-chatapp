@@ -17,8 +17,8 @@ enum UserDeviceTokenEnum: string
     public static function fillable(): array {
         return [
             self::userId(),
+            self::deviceName(),
             self::token(),
-            self::getAddress(),
         ];
     }
 
