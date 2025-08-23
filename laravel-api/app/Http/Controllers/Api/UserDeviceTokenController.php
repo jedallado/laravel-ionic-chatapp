@@ -24,7 +24,7 @@ class UserDeviceTokenController extends Controller
     {
         $data = $request->only(UserDeviceTokenEnum::fillable());
 
-        $tokenExist = UserDeviceTokenEnum::where(UserDeviceTokenEnum::userId(), $data['userId'])
+        $tokenExist = UserDeviceToken::ofUserId($data['userId'])
                         ->where(UserDeviceTokenEnum::token(), $data['token'])->count() > 0;
 
         if (!$tokenExist) {
