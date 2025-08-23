@@ -32,7 +32,7 @@ class UserDeviceTokenController extends Controller
                         ->where(UserDeviceTokenEnum::token(), $token)->count() > 0;
 
         if (!$tokenExist) {
-            $data['userId'] = $userId;
+            $data[UserDeviceTokenEnum::userId()] = $userId;
             $userDeviceToken = UserDeviceToken::create($data);
 
             return response()->json($userDeviceToken, 201);
