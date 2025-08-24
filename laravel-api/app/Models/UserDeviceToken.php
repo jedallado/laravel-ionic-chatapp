@@ -18,9 +18,17 @@ class UserDeviceToken extends BaseModel
 
     public function scopeOfUserId($query, $userId) {
         if (!$userId) {
-            return [];
+            return;
         }
 
         return $query->where(UserDeviceTokenEnum::userId(), '=', $userId);
+    }
+
+    public function scopeOfDeviceName($query, $deviceName) {
+        if (!$deviceName) {
+            return;
+        }
+
+        return $query->where(UserDeviceTokenEnum::deviceName(), '=', $deviceName);
     }
 }

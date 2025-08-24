@@ -27,18 +27,22 @@ class UserDeviceTokenController extends Controller
 
         $userId = Auth::id();
         $token = $data['token'] ?? '';
+        $deviceName = $data['device_name'] ?? '';
 
-        $tokenExist = UserDeviceToken::ofUserId($userId)
-                        ->where(UserDeviceTokenEnum::token(), $token)->count() > 0;
+        $deviceToken = UserDeviceToken::ofUserId($userId)
+                        ->ofDeviceName($deviceName)->first();
 
-        if (!$tokenExist) {
+        if (!$deviceToken) {
             $data[UserDeviceTokenEnum::userId()] = $userId;
             $userDeviceToken = UserDeviceToken::create($data);
 
             return response()->json($userDeviceToken, 201);
         }
 
-        return response()->json(null, 204);
+        $deviceToken->token = $token;
+        $deviceToken->save();
+
+        return response()->json($deviceToken, 200);
     }
 
     /**

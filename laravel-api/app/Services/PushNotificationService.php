@@ -48,8 +48,9 @@ class PushNotificationService
         string $body
     ) {
         $firebaseMessagingUrl = 'https://www.googleapis.com/auth/firebase.messaging';
-        $serviceAccountPath = storage_path('app/firebase/mychatapppushnotif-firebase-adminsdk-fbsvc-22e5722d03.json');
-        $serviceAccountContent = json_decode(file_get_contents($serviceAccountPath), true);
+        $serviceAccountContent = json_decode(env('FIREBASE_CREDENTIALS_STRING'), true);
+        // $serviceAccountPath = storage_path('app/firebase/mychatapppushnotif-firebase-adminsdk-fbsvc-22e5722d03.json');
+        // $serviceAccountContent = json_decode(file_get_contents($serviceAccountPath), true);
 
         $credentials = new ServiceAccountCredentials(
             $firebaseMessagingUrl,

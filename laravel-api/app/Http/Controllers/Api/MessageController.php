@@ -15,6 +15,7 @@ use App\Models\User;
 use App\Models\UserDeviceToken;
 use App\Services\PushNotificationService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class MessageController extends Controller
@@ -65,25 +66,30 @@ class MessageController extends Controller
         broadcast(new MessageReceived($message, $members[0]));
         broadcast(new MessageReceived($message, $members[1]));
 
+        $userId = Auth::id();
+        $recipients = array_diff($members, [$userId]);
+
         // send push notifications
-        $recipient = User::find($members[1]);
-        if ($recipient) {
-            $recipientName = $recipient->profile->full_name;
+        foreach ($recipients as $recipientId) {
+            $recipient = User::find($recipientId);
+            if ($recipient) {
+                $recipientName = $recipient->profile->full_name;
 
-            $deviceTokens = UserDeviceToken::ofUserId($recipient->{UserModelEnum::getId()})->get();
+                $deviceTokens = UserDeviceToken::ofUserId($recipient->{UserModelEnum::getId()})->get();
 
-            foreach ($deviceTokens as $deviceToken) {
-                Log::info("Sending push notification to recipient: {$recipientName}");
-                // TODO: Create a table to store the device tokens per user login
-                $token = $deviceToken->{UserDeviceTokenEnum::token()};
+                foreach ($deviceTokens as $deviceToken) {
+                    Log::info("Sending push notification to recipient: {$recipientName}");
+                    // TODO: Create a table to store the device tokens per user login
+                    $token = $deviceToken->{UserDeviceTokenEnum::token()};
 
-                Log::info($token);
-                if ($token) {
-                    $this->pushNotificationService->sendPushNotificationUsingServiceAccount(
-                        $token,
-                        $recipientName,
-                        $message->getMessage()
-                    );
+                    Log::info($token);
+                    if ($token) {
+                        $this->pushNotificationService->sendPushNotificationUsingServiceAccount(
+                            $token,
+                            $recipientName,
+                            $message->getMessage()
+                        );
+                    }
                 }
             }
         }
