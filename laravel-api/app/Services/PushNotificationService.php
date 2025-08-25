@@ -69,8 +69,20 @@ class PushNotificationService
                     'title' => $title,
                     'body' => $body,
                 ],
+                // iOS: default sound + badge
+                'apns' => [
+                    'payload' => [
+                        'aps' => [
+                            'sound' => 'default'
+                        ],
+                    ],
+                ],
                 'android' => [
                     'priority' => 'high',
+                    'notification' => [
+                        'channel_id' => 'default',
+                        'sound'      => 'default',
+                    ],
                 ],
             ],
         ];
