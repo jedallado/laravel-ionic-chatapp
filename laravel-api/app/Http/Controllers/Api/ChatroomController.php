@@ -112,14 +112,28 @@ class ChatroomController extends Controller
      */
     public function show(string $id)
     {
-        $chatroom = Chatroom::with(['messages' => function ($query) {
+        /*$chatroom = Chatroom::with(['messages' => function ($query) {
             $query->select(MessageModelEnum::getId(),
                 MessageModelEnum::getChatRoomId(),
                 MessageModelEnum::getMessage(),
                 MessageModelEnum::getSenderId(),
                 MessageModelEnum::type(),
                 MessageModelEnum::createdAt());
-        }])->find($id);
+        }])->find($id);*/
+
+        $chatroom = Chatroom::find($id);
+
+        $messages = $chatroom->messages()
+            ->select(MessageModelEnum::getId(),
+                MessageModelEnum::getChatRoomId(),
+                MessageModelEnum::getMessage(),
+                MessageModelEnum::getSenderId(),
+                MessageModelEnum::type(),
+                MessageModelEnum::createdAt())
+            ->orderByDesc(MessageModelEnum::createdAt())
+            ->cursorPaginate(50);
+
+        $chatroom['messages'] = $messages->items();
 
         /*$groupedMessages = collect($chatroom->messages)
             ->groupBy(function ($message) {

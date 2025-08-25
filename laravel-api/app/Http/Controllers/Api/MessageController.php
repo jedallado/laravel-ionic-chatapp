@@ -66,27 +66,23 @@ class MessageController extends Controller
         broadcast(new MessageReceived($message, $members[0]));
         broadcast(new MessageReceived($message, $members[1]));
 
-        $userId = Auth::id();
-        $recipients = array_diff($members, [$userId]);
+        $currentUser = Auth::user();
+        $senderName = $currentUser->profile->full_name;
+        $recipients = array_diff($members, [$currentUser->getId()]);
 
         // send push notifications
         foreach ($recipients as $recipientId) {
             $recipient = User::find($recipientId);
             if ($recipient) {
-                $recipientName = $recipient->profile->full_name;
-
                 $deviceTokens = UserDeviceToken::ofUserId($recipient->{UserModelEnum::getId()})->get();
 
                 foreach ($deviceTokens as $deviceToken) {
-                    Log::info("Sending push notification to recipient: {$recipientName}");
-                    // TODO: Create a table to store the device tokens per user login
                     $token = $deviceToken->{UserDeviceTokenEnum::token()};
 
-                    Log::info($token);
                     if ($token) {
                         $this->pushNotificationService->sendPushNotificationUsingServiceAccount(
                             $token,
-                            $recipientName,
+                            $senderName,
                             $message->getMessage()
                         );
                     }
