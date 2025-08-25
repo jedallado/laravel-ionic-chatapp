@@ -11,11 +11,11 @@ enum MessageTypeEnum: string
     case Sent = 'sent';
     case Received = 'received';
 
-    public static function getSent() {
+    public static function sent() {
         return self::Sent->value;
     }
 
-    public static function getReceived() {
+    public static function received() {
         return self::Received->value;
     }
 }

@@ -14,6 +14,8 @@ enum MessageModelEnum: string
     case SenderId = 'sender_id';
     case Message = 'message';
 
+    case Type = 'type';
+
     case CREATED_AT = 'created_at';
     case UPDATED_AT = 'updated_at';
 
@@ -39,6 +41,10 @@ enum MessageModelEnum: string
 
     public static function getMessage(): string {
         return self::Message->value;
+    }
+
+    public static function type(): string {
+        return self::Type->value;
     }
 
     public static function createdAt(): string {

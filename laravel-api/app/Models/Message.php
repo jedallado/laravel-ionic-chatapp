@@ -38,7 +38,7 @@ class Message extends BaseModel
     {
         $user = Auth::user();
 
-        $type = $this->getSenderId() === $user->id ? MessageTypeEnum::getSent() : MessageTypeEnum::getReceived();
+        $type = $this->getSenderId() === $user->id ? MessageTypeEnum::sent() : MessageTypeEnum::received();
 
         return Attribute::make(
             get: fn($value, array $attributes) => $type,

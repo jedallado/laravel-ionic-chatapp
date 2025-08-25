@@ -116,7 +116,8 @@ class ChatroomController extends Controller
             $query->select(MessageModelEnum::getId(),
                 MessageModelEnum::getChatRoomId(),
                 MessageModelEnum::getMessage(),
-                // MessageModelEnum::getSenderId(),
+                MessageModelEnum::getSenderId(),
+                MessageModelEnum::type(),
                 MessageModelEnum::createdAt());
         }])->find($id);
 
