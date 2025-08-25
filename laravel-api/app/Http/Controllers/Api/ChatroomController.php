@@ -130,7 +130,6 @@ class ChatroomController extends Controller
                 MessageModelEnum::getSenderId(),
                 MessageModelEnum::type(),
                 MessageModelEnum::createdAt())
-            ->orderByDesc(MessageModelEnum::createdAt())
             ->cursorPaginate(50);
 
         $chatroom['messages'] = $messages->items();
