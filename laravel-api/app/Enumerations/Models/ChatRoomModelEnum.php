@@ -8,7 +8,7 @@ enum ChatRoomModelEnum: string
 {
     use BaseEnumTrait;
 
-    const TABLE_NAME = 'chat_rooms';
+    const TABLE_NAME = 'chatrooms';
 
     case RoomName = 'room_name';
     case Members = 'members';

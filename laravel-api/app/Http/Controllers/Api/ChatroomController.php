@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Enumerations\Models\ChatRoomModelEnum;
+use App\Enumerations\Models\MessageModelEnum;
 use App\Http\Controllers\Controller;
 use App\Models\Chatroom;
 use Illuminate\Database\Eloquent\Builder;
@@ -71,10 +72,15 @@ class ChatroomController extends Controller
                     'user_profiles.lastname' => 1,
                     'user_profiles.photo' => 1
                 ]
+            ],
+            [
+                '$sort' => [
+                    'last_message.created_at' => -1 // -1 = descending, 1 = ascending
+                ]
             ]
         ];
 
-        $chatrooms = DB::table('chatrooms')->raw(function (Collection $collection) use ($pipeline) {
+        $chatrooms = DB::table(ChatRoomModelEnum::getTableName())->raw(function (Collection $collection) use ($pipeline) {
             return $collection->aggregate($pipeline);
         })->toArray();
 
@@ -106,7 +112,13 @@ class ChatroomController extends Controller
      */
     public function show(string $id)
     {
-        $chatroom = Chatroom::with('messages')->find($id);
+        $chatroom = Chatroom::with(['messages' => function ($query) {
+            $query->select(MessageModelEnum::getId(),
+                MessageModelEnum::getChatRoomId(),
+                MessageModelEnum::getMessage(),
+                // MessageModelEnum::getSenderId(),
+                MessageModelEnum::createdAt());
+        }])->find($id);
 
         /*$groupedMessages = collect($chatroom->messages)
             ->groupBy(function ($message) {
