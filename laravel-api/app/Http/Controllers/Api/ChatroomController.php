@@ -130,9 +130,11 @@ class ChatroomController extends Controller
                 MessageModelEnum::getSenderId(),
                 MessageModelEnum::type(),
                 MessageModelEnum::createdAt())
+            ->orderByDesc(MessageModelEnum::getId()) // get the newest first
             ->cursorPaginate(50);
 
-        $chatroom['messages'] = $messages->items();
+        // reorder into ascending, since we display it ascending in the UI
+        $chatroom['messages'] = collect($messages->items())->reverse()->values();
 
         /*$groupedMessages = collect($chatroom->messages)
             ->groupBy(function ($message) {
