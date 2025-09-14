@@ -53,7 +53,7 @@ class Message extends BaseModel
 
             if ($date->isToday()) {
                 $diffInSeconds = $now->diffInSeconds($date, true);
-                if ($diffInSeconds < 60) {
+                if ($diffInSeconds < 15) {
                     return 'a few seconds ago';
                 }
 

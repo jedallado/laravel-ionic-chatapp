@@ -42,22 +42,33 @@ class MessageController extends Controller
     {
         $chatroomId = $request->get('chatroom_id');
         $chatroom = Chatroom::find($chatroomId);
+        $currentLoggedUserId = Auth::id();
 
         // if there's no chatroom yet, create a chat room first
         if (!$chatroom) {
-            $chatroom = new Chatroom($request->only(ChatRoomModelEnum::fillable())); // Chatroom::create($request->only(ChatRoomModelEnum::fillable()));
+            $members = [
+                $currentLoggedUserId,
+                $request->get(MessageModelEnum::getSenderId())
+            ];
+            $chatroom = new Chatroom([
+                'members' => $members
+            ]); // Chatroom::create($request->only(ChatRoomModelEnum::fillable()));
             $chatroom->setDefaultRoomName();
             $chatroom->save();
         }
 
         $message = new Message($request->only(MessageModelEnum::fillable()));
+        $message->{MessageModelEnum::getSenderId()} = $currentLoggedUserId;
         $message = $chatroom->messages()->save($message);
 
         // set the last message in the chat room
         $chatroom->setLastMessage($message);
         $chatroom->save();
 
+        Log::info($chatroom);
+
         $members = $chatroom->getMembers();
+        Log::info($members);
         // send this to the very first recipient for now, work on group chat later
         broadcast(new MessageSent($message, $members[0]));
         broadcast(new MessageSent($message, $members[1]));
