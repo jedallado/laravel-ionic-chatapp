@@ -48,23 +48,7 @@ class Message extends BaseModel
     protected function createdAt(): Attribute
     {
         return Attribute::get(function ($value, $attributes) {
-            $date = Carbon::parse($value);
-            $now = Carbon::now();
-
-            if ($date->isToday()) {
-                $diffInSeconds = $now->diffInSeconds($date, true);
-                if ($diffInSeconds < 15) {
-                    return 'a few seconds ago';
-                }
-
-                return $date->diffForHumans();
-            } elseif ($date->greaterThanOrEqualTo($now->copy()->startOfWeek()) && $date->lessThanOrEqualTo($now)) {
-                return $date->format('D h:ia'); // Mon 11:23AM
-            } elseif ($date->isCurrentYear()) {
-                return $date->format('F j'); // April 15
-            } else {
-                return $date->format('M d, Y'); // Jan 01, 2024
-            }
+            return self::formatDateToReadable($value);
         });
     }
 }

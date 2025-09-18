@@ -88,6 +88,10 @@ class ChatroomController extends Controller
             if ($chatroom[ChatRoomModelEnum::roomName()] === ChatRoomModelEnum::defaultChatRoomName()) {
                 $chatroom[ChatRoomModelEnum::roomName()] = $chatroom->user_profiles[0]->firstname . " " . $chatroom->user_profiles[0]->lastname;
             }
+
+            /*if ($chatroom->last_message) {
+                $chatroom->last_message[MessageModelEnum::createdAt()] = Chatroom::formatDateToReadable($chatroom->last_message[MessageModelEnum::createdAt()]);
+            }*/
         }
 
         return response()->json($chatrooms);
@@ -124,12 +128,13 @@ class ChatroomController extends Controller
         $chatroom = Chatroom::find($id);
 
         $messages = $chatroom->messages()
-            ->select(MessageModelEnum::getId(),
+            /*->select(MessageModelEnum::getId(),
                 MessageModelEnum::getChatRoomId(),
                 MessageModelEnum::getMessage(),
                 MessageModelEnum::getSenderId(),
                 MessageModelEnum::type(),
-                MessageModelEnum::createdAt())
+                MessageModelEnum::createdAt(),
+                MessageModelEnum::createdAtReadable())*/
             ->orderByDesc(MessageModelEnum::getId()) // get the newest first
             ->cursorPaginate(50);
 

@@ -65,10 +65,8 @@ class MessageController extends Controller
         $chatroom->setLastMessage($message);
         $chatroom->save();
 
-        Log::info($chatroom);
-
+        // $message->created_at_readable = Message::formatDateToReadable($message->created_at);
         $members = $chatroom->getMembers();
-        Log::info($members);
         // send this to the very first recipient for now, work on group chat later
         broadcast(new MessageSent($message, $members[0]));
         broadcast(new MessageSent($message, $members[1]));

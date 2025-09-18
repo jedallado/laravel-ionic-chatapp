@@ -19,6 +19,8 @@ enum MessageModelEnum: string
     case CREATED_AT = 'created_at';
     case UPDATED_AT = 'updated_at';
 
+    case CREATED_AT_READABLE = 'created_at_readable';
+
     public static function fillable(): array {
         return [
             self::getChatRoomId(),
@@ -53,5 +55,9 @@ enum MessageModelEnum: string
 
     public static function updatedAt(): string {
         return self::UPDATED_AT->value;
+    }
+
+    public static function createdAtReadable(): string {
+        return self::CREATED_AT_READABLE->value;
     }
 }
