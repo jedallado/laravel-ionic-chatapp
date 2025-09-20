@@ -43,7 +43,8 @@ return [
     ],
 
     'fcm' => [
-        'api_key' => env('FCM_API_KEY')
+        'api_key' => env('FCM_API_KEY'),
+        'credentials_string' => env('FIREBASE_CREDENTIALS_STRING'),
     ]
 
 ];
